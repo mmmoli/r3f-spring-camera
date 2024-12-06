@@ -1,9 +1,7 @@
 import { SpringValue, useSpring } from "@react-spring/three";
 import { useCameraStore, type Position } from "../../shared";
-import { useCallback } from "react";
 
 export interface UseCamera {
-  to: (to: Position) => void;
   springs: {
     position: SpringValue<Position>;
   };
@@ -13,7 +11,7 @@ export const useCamera = (): UseCamera => {
   const position = useCameraStore((state) => state.position);
   const setPosition = useCameraStore((state) => state.setPosition);
 
-  const [springs, api] = useSpring(
+  const [springs] = useSpring(
     () => ({
       position,
       onRest: ({ value }) => setPosition(value.position),
@@ -29,10 +27,5 @@ export const useCamera = (): UseCamera => {
     [position],
   );
 
-  const to = useCallback(
-    (p: Position) => api.start({ position: [...p] }),
-    [api],
-  );
-
-  return { to, springs };
+  return { springs };
 };

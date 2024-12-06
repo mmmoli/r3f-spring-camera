@@ -6,22 +6,32 @@ import { AnimatedCamera } from "./features/camera/animated-camera";
 import { useCameraStore } from "./shared";
 
 export function App() {
-  const { to, springs } = useCamera();
+  const { springs } = useCamera();
   const position = useCameraStore((state) => state.position);
+  const setPosition = useCameraStore((state) => state.setPosition);
 
   useEffect(() => {
     springs.position.to((x, y, z) => console.log([x, y, z]));
   }, [springs]);
 
   const handleClick = useCallback(() => {
-    to([1, 1, 5]);
-  }, [to]);
+    setPosition([
+      5 * Math.random() - 2.5,
+      5 * Math.random() - 2.5,
+      5 + 5 * Math.random(),
+    ]);
+  }, [setPosition]);
 
   return (
     <div>
       <pre>{JSON.stringify(position, null, 2)}</pre>
       <button onClick={handleClick}>Move</button>
-      <Canvas>
+      <Canvas
+        style={{
+          border: "2px solid red",
+          height: "100vh",
+        }}
+      >
         <ambientLight intensity={0.5} />
 
         <Box>
